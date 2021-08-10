@@ -1,6 +1,6 @@
 # leafcutter
 
-Docker container for colocalization analysis including,
+Docker container for annotation-free splicing analysis including,
 - [leafcutter](https://github.com/davidaknowles/leafcutter)
 
 ## how to build

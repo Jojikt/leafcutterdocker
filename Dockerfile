@@ -23,6 +23,7 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     libgdal-dev \
     libgeos-dev \
     libproj-dev \
+    hisat2 \
     curl \
     g++ && \
     apt-get clean && \

@@ -14,6 +14,7 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/99no-check-valid-until && \
     apt-get update && \
     apt-get install -y samtools \
+    regtools \ 
     r-base \
     r-base-dev \
     build-essential \
@@ -25,6 +26,10 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     libproj-dev \
     hisat2 \
     curl \
+    cmake \
+    wget \
+    curl \
+    build-essential \    
     g++ && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -39,6 +44,15 @@ RUN mkdir -p /root/.R && \
 # Step 3: Update Conda
 RUN conda update -n base -c defaults conda -y
 
+RUN git clone https://github.com/griffithlab/regtools /regtools
+# Set the working directory
+WORKDIR /regtools
+
+# Create a build directory and change to it
+RUN mkdir build && cd build
+
+# Run cmake and make to build the project
+RUN cd build && cmake .. && make
 # Install devtools package dependencies first (for R packages)
 RUN R -e "install.packages(c('curl', 'openssl', 'git2r'), repos='https://cloud.r-project.org/')"
 

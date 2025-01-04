@@ -55,6 +55,37 @@ ENV PKG_CONFIG_PATH=/opt/conda/envs/leafcutter/lib/pkgconfig:$PKG_CONFIG_PATH
 # Install R packages (httr2, ragg, pkgdown, usethis, rcmdcheck, rversions, urlchecker)
 RUN R -e "install.packages(c('httr2', 'ragg', 'pkgdown', 'usethis', 'rcmdcheck', 'rversions', 'urlchecker', 'systemfonts'), repos = 'https://cran.rstudio.com/')"
 
+
+################## Java
+RUN yum install -y java
+
+################## wget
+RUN yum install -y wget
+
+##################  R (> version 3.4.3)
+RUN yum install -y epel-release
+RUN yum install -y R-core R-devel
+
+#### utils
+
+RUN yum install -y dos2unix
+RUN yum install -y mc
+
+#### Get the quanTIseq source code
+ADD https://github.com/icbi-lab/quanTIseq/archive/039eb16455373915ace33b3ecede09bde697d005.zip /usr/local/quantiseq/
+RUN cd /usr/local/quantiseq && \
+    unzip 039eb16455373915ace33b3ecede09bde697d005.zip && \
+    cd quanTIseq-039eb16455373915ace33b3ecede09bde697d005 && \
+    cp dependencies.R /tmp/ && \
+    cp -r quantiseq /opt/quantiseq
+
+#### Install dependencies
+RUN Rscript /tmp/dependencies.R
+
+##################### INSTALLATION END #####################
+
+#Clean up
+RUN rm -rf /tmp/* /var/tmp/* ~/.cache/*
 # Set working directory
 WORKDIR /home
 
